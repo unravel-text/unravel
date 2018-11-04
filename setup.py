@@ -64,7 +64,7 @@ setuptools.setup(
     ],
     extras_require={
             'dev': ['check-manifest', 'mypy', 'bumpversion'],
-            'test': ['coverage'],
+            'test': ['coverage', 'check-manifest', 'readme_renderer', 'flake8'],
     },
     entry_points={
         'console_scripts': [

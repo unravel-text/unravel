@@ -3,15 +3,21 @@ language: python
 matrix:
   include:
     - python: 3.5
-      env: TOXENV=py35
     - python: 3.6
-      env: TOXENV=py36
     - python: 3.7
-      env: TOXENV=py37
+      dist: xenial
+      sudo: true
 
-install: pip install tox
+branches:
+  only:
+    - master
+    - develop
 
-script: tox
+install:
+  pip install .
 
-notifications:
-  email: false
+script:
+  - check-manifest --ignore tests*
+  - python setup.py check -m -r -s
+  - flake8 .
+  - python -m unittest
