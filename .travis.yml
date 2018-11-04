@@ -1,3 +1,4 @@
+---
 language: python
 
 matrix:
@@ -8,13 +9,14 @@ matrix:
       dist: xenial
       sudo: true
 
+cache: pip
+
 branches:
   only:
     - master
     - develop
 
-install:
-  pip install .
+install: pip install .[dev,test]
 
 script:
   - check-manifest --ignore tests*
