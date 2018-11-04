@@ -18,7 +18,7 @@ class AutomatedReadabilityIndex(BaseReadability):
         if not text:
             return ReadingLevel(self.name)
 
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         characters = text_info.character_count
         words = text_info.word_count
         sentences = text_info.sentence_count
@@ -29,5 +29,5 @@ class AutomatedReadabilityIndex(BaseReadability):
         result = 4.71 * (characters / words) + 0.5 * (words / sentences) - 21.43
         if result < 0:
             result = 0
-        reading = ReadingLevel(self.name, index=result, level=int(result), age=int(result) + 4)
+        reading = ReadingLevel(self.name, text_info, index=result, level=int(result), age=int(result) + 4)
         return reading

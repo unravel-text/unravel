@@ -34,16 +34,16 @@ class GunningFogIndex(BaseReadability):
     def calc(self, text: str) -> ReadingLevel:
         if not text:
             return ReadingLevel(self.name)
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         words = text_info.word_count
         sentences = text_info.sentence_count
-        polysyllable_words = text_info.polysyllable_count
+        polysyllable_words = text_info.polysyllable_word_count
 
         if sentences < 1 or words < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         result = 0.4 * ((words / sentences) + 100.0 * (polysyllable_words / words))
         if result < 0:
             result = 0
-        reading = ReadingLevel(self.name, index=result, level=int(result), age=int(result) + 4)
+        reading = ReadingLevel(self.name, text_info, index=result, level=int(result), age=int(result) + 4)
         return reading

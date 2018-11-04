@@ -21,16 +21,16 @@ class FleschKincaidGradeLevel(BaseReadability):
         if not text:
             return ReadingLevel(self.name)
 
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         words = text_info.word_count
         sentences = text_info.sentence_count
         syllables = text_info.syllable_count
 
         if sentences < 1 or words < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         result = 0.39 * (words / sentences) + 11.8 * (syllables / words) - 15.59
         if result < 0:
             result = 0
-        reading = ReadingLevel(self.name, index=result, level=int(result), age=int(result) + 4)
+        reading = ReadingLevel(self.name, text_info, index=result, level=int(result), age=int(result) + 4)
         return reading

@@ -1,5 +1,7 @@
 from typing import Any, Optional
 
+from unravel.text import TextInfo
+
 
 class ReadingLevel:
     """
@@ -21,18 +23,19 @@ class ReadingLevel:
     level_range = range(0, 19, 1)
     age_range = range(4, 23, 1)
 
-    def __init__(self, name: str, index: Any = None,
+    def __init__(self, name: str, text_info: TextInfo = None, index: Any = None,
                  grade: Optional[str] = None, level: Optional[int] = None, age: Optional[int] = None):
         self.measure_name = name  # type: str
         self.measure_index = index  # type: Any
+        self.text_info = text_info
 
         grade_g, level_g, age_g = self._from_grade(grade)
         grade_l, level_l, age_l = self._from_level(level)
         grade_a, level_a, age_a = self._from_age(age)
 
-        self.grade = None
-        self.level = None
-        self.age = None
+        self.grade = grade_g or grade_l or grade_a
+        self.level = level_l or level_g or level_a
+        self.age = age_a or age_g or age_l
 
     # # primary
     # grade_1 = 5

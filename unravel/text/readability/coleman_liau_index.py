@@ -22,13 +22,13 @@ class ColemanLiauIndex(BaseReadability):
         if not text:
             return ReadingLevel(self.name)
 
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         characters = text_info.character_count
         words = text_info.word_count
         sentences = text_info.sentence_count
 
         if sentences < 1 or words < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         ave_letters = (characters / words) * 100
         ave_sentences = (sentences / words) * 100
@@ -36,5 +36,5 @@ class ColemanLiauIndex(BaseReadability):
         result = (0.0588 * ave_letters) - (0.296 * ave_sentences) - 15.8
         if result < 0:
             result = 0
-        reading = ReadingLevel(self.name, index=result, level=int(result), age=int(result) + 4)
+        reading = ReadingLevel(self.name, text_info, index=result, level=int(result), age=int(result) + 4)
         return reading

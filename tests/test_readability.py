@@ -1,7 +1,13 @@
 import logging
+
+import nltk
+import pyphen
+import spacy
 from unittest import TestCase
 
-from unravel.text.library import NltkNaturalLanguage, SpacyNaturalLanguage
+from unravel.text import TextInfo
+
+from unravel.text.natural_language import NaturalLanguage
 from unravel.text.readability import AutomatedReadabilityIndex, ColemanLiauIndex, DaleChallReadabilityFormula, \
     FleschKincaidGradeLevel, FleschReadingEase, GunningFogIndex, LinsearWrite, Lix, Rix, SimpleMeasureOfGobbledygook
 
@@ -22,50 +28,32 @@ class ReadabilityTestCase(TestCase):
                      "per 100 words and sentences  per 100 words. Both predictors can be counted by an optical scanning "
                      "device, and thus the formula makes it economically feasible for an organization such as the U.S. "
                      "Office of Education to calibrate the readability of all textbooks for the public school system.",
-             'chars': 639, 'sentences': 5, 'words': 119, 'level': 14.5},
+             'chars': 769, 'sentences': 5, 'words': 119, 'level': 14.5},
             {'text': "The Australian platypus is seemingly a hybrid of a mammal and reptilian creature.",
-             'chars': 68, 'sentences': 1, 'words': 13, 'syllables': 24, 'level': 11.3}
+             'chars': 81, 'sentences': 1, 'words': 13, 'syllables': 24, 'level': 11.3}
         ]
 
-    def test_nltk(self):
-        nltk = NltkNaturalLanguage()
+    def test_readability(self):
+        nl = NaturalLanguage()
         ris = [
-            AutomatedReadabilityIndex(self.logger, nltk),
-            ColemanLiauIndex(self.logger, nltk),
-            DaleChallReadabilityFormula(self.logger, nltk),
-            FleschKincaidGradeLevel(self.logger, nltk),
-            FleschReadingEase(self.logger, nltk),
-            GunningFogIndex(self.logger, nltk),
-            LinsearWrite(self.logger, nltk),
-            Lix(self.logger, nltk),
-            Rix(self.logger, nltk),
-            SimpleMeasureOfGobbledygook(self.logger, nltk),
+            AutomatedReadabilityIndex(self.logger, nl),
+            ColemanLiauIndex(self.logger, nl),
+            DaleChallReadabilityFormula(self.logger, nl),
+            FleschKincaidGradeLevel(self.logger, nl),
+            FleschReadingEase(self.logger, nl),
+            GunningFogIndex(self.logger, nl),
+            LinsearWrite(self.logger, nl),
+            Lix(self.logger, nl),
+            Rix(self.logger, nl),
+            SimpleMeasureOfGobbledygook(self.logger, nl),
         ]
 
         for ri in ris:
             for sample in self.sample_text:
-                with self.subTest(sample=sample):
+                with self.subTest(sample=sample['text'][0:10], ri=ri.slug):
                     reading_level = ri.calc(sample['text'])
-                    self.assertEqual(reading_level.level, sample['level'])
+                    self.assertEqual(reading_level.text_info.character_count, sample['chars'])
+                    self.assertEqual(reading_level.text_info.sentence_count, sample['sentences'])
+                    self.assertEqual(reading_level.text_info.word_count, sample['words'])
 
-    def test_spacy(self):
-        spacy = SpacyNaturalLanguage()
-
-        ris = [
-            AutomatedReadabilityIndex(self.logger, spacy),
-            ColemanLiauIndex(self.logger, spacy),
-            DaleChallReadabilityFormula(self.logger, spacy),
-            FleschKincaidGradeLevel(self.logger, spacy),
-            FleschReadingEase(self.logger, spacy),
-            GunningFogIndex(self.logger, spacy),
-            LinsearWrite(self.logger, spacy),
-            Lix(self.logger, spacy),
-            Rix(self.logger, spacy),
-            SimpleMeasureOfGobbledygook(self.logger, spacy),
-        ]
-
-        for ri in ris:
-            for sample in self.sample_text:
-                with self.subTest(sample=sample):
-                    reading_level = ri.calc(sample['text'])
-                    self.assertEqual(reading_level.level, sample['level'])
+                    self.assertAlmostEqual(reading_level.level, sample['level'], delta=1.5)

@@ -60,11 +60,14 @@ setuptools.setup(
         'Issues': 'https://github.com/unravel-text/unravel/issues',
     },
     install_requires=[
-        'nltk', 'numpy', 'spacy', 'celery', 'country_list'
+        'nltk', 'pyphen', 'spacy', 'pyphen',
+        'celery',
+        'country_list',
+        'numpy',
     ],
     extras_require={
             'dev': ['check-manifest', 'mypy', 'bumpversion'],
-            'test': ['coverage', 'check-manifest', 'readme_renderer', 'flake8', 'docutils', 'twine'],
+            'test': ['coverage', 'check-manifest', 'readme_renderer', 'readme_render[md]', 'flake8', 'docutils', 'twine'],
     },
     entry_points={
         'console_scripts': [

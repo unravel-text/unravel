@@ -22,12 +22,12 @@ class SimpleMeasureOfGobbledygook(BaseReadability):
     def calc(self, text: str) -> ReadingLevel:
         if not text:
             return ReadingLevel(self.name)
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         sentences = text_info.sentence_count
-        polysyllable_words = text_info.polysyllable_count
+        polysyllable_words = text_info.polysyllable_word_count
 
         if sentences < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         if sentences < 30:
             self._logger.warning('Calculating SMOG readability on text with fewer '
@@ -36,5 +36,5 @@ class SimpleMeasureOfGobbledygook(BaseReadability):
         result = 1.0430 * sqrt(polysyllable_words * 30.0 / sentences) + 3.1291
         if result < 0:
             result = 0
-        reading = ReadingLevel(self.name, index=result, level=int(result), age=int(result) + 4)
+        reading = ReadingLevel(self.name, text_info, index=result, level=int(result), age=int(result) + 4)
         return reading

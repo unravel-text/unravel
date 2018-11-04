@@ -33,12 +33,12 @@ class Rix(BaseReadability):
     def calc(self, text: str) -> ReadingLevel:
         if not text:
             return ReadingLevel(self.name)
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         long_words = text_info.word_letter_count(min_count=7)
         sentences = text_info.sentence_count
 
         if sentences < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         result = long_words / sentences
 
@@ -79,5 +79,5 @@ class Rix(BaseReadability):
         else:  # this is made up
             level = 18
 
-        reading = ReadingLevel(self.name, index=result, level=level)
+        reading = ReadingLevel(self.name, text_info, index=result, level=level)
         return reading

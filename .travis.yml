@@ -16,10 +16,17 @@ branches:
     - master
     - develop
 
-install: pip install .[dev,test]
+install:
+  - pip install .[dev,test]
+  - pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.0.0/en_core_web_sm-2.0.0.tar.gz
 
 script:
+  - python setup.py sdist
+  - python setup.py bdist_wheel
   - check-manifest
   - twine check dist/*
   - flake8 .
   - python -m unittest
+
+notifications:
+  email: false

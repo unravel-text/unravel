@@ -27,12 +27,12 @@ class DaleChallReadabilityFormula(BaseReadability):
     def calc(self, text: str) -> ReadingLevel:
         if not text:
             return ReadingLevel(self.name)
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         words = text_info.word_count
         sentences = text_info.sentence_count
 
         if sentences < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         all_difficult_words = set()
         for letter, letter_words in self._difficult_words().items():
@@ -91,7 +91,7 @@ class DaleChallReadabilityFormula(BaseReadability):
             level = 17
         else:  # this is made up
             level = 18
-        reading = ReadingLevel(self.name, index=result, level=level)
+        reading = ReadingLevel(self.name, text_info, index=result, level=level)
         return reading
 
     @staticmethod

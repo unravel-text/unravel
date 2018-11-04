@@ -2,13 +2,13 @@ from logging import Logger
 
 
 from unravel.text import ReadingLevel
-from unravel.text.library import NaturalLanguage
+from unravel.text.natural_language import NaturalLanguage
 
 
 class BaseReadability:
-    def __init__(self, logger: Logger, text_analyser: NaturalLanguage):
+    def __init__(self, logger: Logger, nl: NaturalLanguage):
+        self._nl = nl
         self._logger = logger
-        self._text_analyser = text_analyser
 
     def calc(self, text: str) -> ReadingLevel:
         """

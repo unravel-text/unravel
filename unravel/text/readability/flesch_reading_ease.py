@@ -26,13 +26,13 @@ class FleschReadingEase(BaseReadability):
     def calc(self, text: str) -> ReadingLevel:
         if not text:
             return ReadingLevel(self.name)
-        text_info = self._text_analyser.get_text_info(text)
+        text_info = self._nl.get_text_info(text)
         words = text_info.word_count
         sentences = text_info.sentence_count
         syllables = text_info.syllable_count
 
         if sentences < 1 or words < 1:
-            return ReadingLevel(self.name)
+            return ReadingLevel(self.name, text_info)
 
         result = 206.835 - 1.015 * (words / sentences) - 85.6 * (syllables / words)
 
@@ -73,5 +73,5 @@ class FleschReadingEase(BaseReadability):
         else:  # this is made up
             level = 18
 
-        reading = ReadingLevel(self.name, index=result, level=level)
+        reading = ReadingLevel(self.name, text_info, index=result, level=level)
         return reading
