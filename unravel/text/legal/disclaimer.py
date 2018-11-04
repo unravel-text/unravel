@@ -1,0 +1,2 @@
+class Disclaimer:
+    pass
