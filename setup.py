@@ -67,7 +67,7 @@ setuptools.setup(
     ],
     extras_require={
             'dev': ['check-manifest', 'mypy', 'bumpversion'],
-            'test': ['coverage', 'check-manifest', 'readme_renderer', 'readme_render[md]', 'flake8', 'docutils', 'twine'],
+            'test': ['coverage', 'check-manifest', 'readme_renderer', 'readme_renderer[md]', 'cmarkgfm', 'flake8', 'docutils', 'twine'],
     },
     entry_points={
         'console_scripts': [
